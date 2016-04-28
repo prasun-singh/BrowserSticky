@@ -1,0 +1,102 @@
+* { 
+    margin: 0;
+    padding: 0;
+  }
+  footer, section, header, aside, figure {
+    display: block;
+  }
+  body {
+    padding: 2em;
+    font-size: 15px;
+    font-family: helvetica, arial, sans-serif;
+  }
+  form {
+    width: 280px;
+    background: #333;
+    color: #fff;
+    border-radius: 5px;
+    padding: 5px 10px;
+  }
+  #newitem {
+    width: 160px;
+  }
+  #todolist {
+    width: 280px;
+    margin: 10px 10px;
+  }
+  #todolist li {
+    border-radius: 2px;
+    list-style: none;
+    background: #eee;
+    padding: 5px 10px;
+    margin-bottom: 5px;
+    position: relative;
+  }
+  #todolist li:nth-child(2n) {
+    background: #ccc;
+  }
+  #todolist li:hover:after,
+  #todolist li.done:after {
+    content: '✔';
+    color: #060;
+    position: absolute;
+    right: 5px;    
+  }
+  #todolist li.done:hover:after {
+    content: 'x';
+    font-weight: bold;
+    color: #c00;
+    position: absolute;
+    right: 5px;    
+  }
+
+ /* Dropdown Button */
+.dropbtn {
+    background-color: skyblue;
+    color: white;
+    padding: 10px;
+    font-size: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    position: relative;
+    display:table-caption;
+    float: right;
+}
+
+.todoList{
+height: 100px;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+}
