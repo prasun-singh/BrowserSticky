@@ -1,108 +1,95 @@
 (function(){
       
   var todo = document.querySelector( '#todolist' ),
-      form = document.querySelector( 'form' ),
-      field = document.querySelector( '#title' );
-      content = document.querySelector( '#content' );
-      todoarr = new Array;
-      id =null;
-      dropbtn = '<div class="dropdown">'+
-  '<button class="dropbtn">&#9776;</button>'+
-  '<div class="dropdown-content">'+
-    '      <button id="rambo" name="rambo"><a href="#" >Delete</a></button>'+
-    '<a href="#">update</a>'+
-    '<a href="#">delete</a>'+
-  '</div>'+
-'</div>'
+  form = document.querySelector( 'form' ),
+  field = document.querySelector( '#title' );
+  var content = document.querySelector( '#content' );
+  var todoarr = new Array;
 
   form.addEventListener( 'submit', function( ev ) {
-    id = localStorage.getItem("ID");  
-      console.log("id ids === "+id)
-    if(id === undefined || id === null){id = 0}
-      id = parseInt(id)+1 
-      console.log("id id === "+id)
-    task = { "id":id,"title": field.value,"content": content.value, "time":new Date(),"modified": new Date()   }  
+    task = { "id":Date.now(),"title": field.value,"content": content.value, "time":new Date(),"modified": new Date()   } 
     todoarr.push(task) 
     field.value = '';
     field.focus();
     content.value = '';  
     storestate();
-         showElement(new Array(task));
- 
+    display()
     ev.preventDefault();
   }, false);
 
     
 function showElement(arr){
-      /*if ( localStorage.getItem("todo") ) {
-        arr = JSON.parse(localStorage.getItem("todo"));
-    */
+  var innerHTML = '';
         for(var i=0; i<arr.length;i++){
-            console.log(arr[i].id)
-            todo.innerHTML += '<li  class="todoList" id='+arr[i].id+'><div class="menu">'+dropbtn+'</div><div class="heading"><h1>' + arr[i].title+ '</h1></div><div contenteditable="true">' +arr[i].content + '</div></li>';    
-            
-        //}
+              dropbtn = '<div class="dropdown">'+
+  '<button class="dropbtn">&#9776;</button>'+
+  '<div class="dropdown-content">'+
+    '<a id="delete'+arr[i].id+'"  href="#" >Delete</a>'+
+    '<a id="update'+arr[i].id+'"href="#">update</a>'+
+    '<a href="#">delete</a>'+
+  '</div>'+
+'</div>'    
+            innerHTML += '<li  class="todoList" id='+arr[i].id+'><div class="menu">'+dropbtn+'</div><div class="heading"><h1>' + arr[i].title+ '</h1></div><textarea id="contentbody">' +arr[i].content + '</textarea></li>';    
       }
-    
+ return innerHTML;   
 }
+  
+    
+document.addEventListener('click', function(e) {
+    tar=e.target
+    if(tar.tagName == 'A'){
+    var pnode = tar.parentNode.parentNode.parentNode.parentNode;
+    todoarr = JSON.parse(localStorage.getItem("todo"));
+        console.log(e.target.id.substring(6,e.target.id.length))
+    if(e.target.id.substring(0,6) == 'delete'){
+        ids = e.target.id.substring(6,e.target.id.length);
+        i=getJsonElement(ids)
+        todoarr.splice(i,1);    
+        storestate();
+        display();
+    }
+        
+    else if(e.target.id.substring(0,6) == 'update'){
+        ids = e.target.id.substring(6,e.target.id.length);
+        i=getJsonElement(ids)
+        console.log(pnode.childNodes.item(2).value)
+        if(localStorage.getItem("todo")){
+        todoarr = JSON.parse(localStorage.getItem("todo")) ;   
+         }
+        todoarr[i].content = pnode.childNodes.item(2).value;
+        storestate() ;
+        display();
+    }}
+});   
+    
+    
+    
+function getJsonElement(id){
+    arr = JSON.parse(localStorage.getItem("todo"));
+    for(var i=0; i<arr.length;i++){
+        if(arr[i].id==id) {
+            console.log(i);
+            return i;
+        }}
+    return "null";
+ }  
+
+
+function display(){
+todo.innerHTML = null;
+    arr = localStorage.getItem("todo");
+    if (arr) {
+    arr = JSON.parse(localStorage.getItem("todo"));
+    todo.innerHTML = showElement(arr)}    
+}    
+    
 
 window.onload = function(){
-    if ( localStorage.getItem("todo") ) {
-        arr = JSON.parse(localStorage.getItem("todo"));
-        showElement(arr);}
-    
-           var rambo = document.getElementById('rambo');
-        todo.addEventListener( 'click', function( ev ) {
-    var t = ev.target;
-    var pnode = t.parentNode.parentNode.parentNode.parentNode.parentNode;                    
-       console.log("id is"+pnode.getAttribute("id"))
-        if ( localStorage.getItem("todo") ) {
-        arr = JSON.parse(localStorage.getItem("todo"));
-        console.log(arr[i]);    
-        for(var i=0; i<arr.length;i++){
-            if(arr[i].id===id) {
-                console.log(arr[i])
-                todoarr.splice(i-1,1)
-            }   
-            storestate();
-        }}
-            
-     
-    if ( pnode.tagName === 'LI' ) {
-
-        pnode.parentNode.removeChild( pnode );
- 
-        
-        
-        storestate();
-        console.log("hello");
-    }
-    },false) 
+display();
 }
 
-    
-/*  rambo.addEventListener( 'click', function( ev ) {
-   alert("hello");
-  },false);*/
- 
-/*function del(){
-        todo.addEventListener( 'click', function( ev ) {
-    var t = ev.target;
-    if ( t.parentNode.tagName === 'LI' ) {
 
-        t.parentNode.removeChild( t );}
-    },false) }   */
-    
-  function storestate() {
-    localStorage.todolist = todo.innerHTML;
+function storestate() {
     localStorage.setItem("todo",JSON.stringify(todoarr)) 
-    localStorage.setItem("ID",id)
   };
-
-  function retrievestate() {
-    if ( localStorage.todolist ) {
-      todo.innerHTML = localStorage.todolist;
-    }
-  };
-
 })();
