@@ -5,13 +5,10 @@
   field = document.querySelector( '#title' );
   var content = document.querySelector( '#content' );
   var todoarr = new Array;
-  var trasharr = new Array; 
-    
 
     
-   try{    
+/*   try{    
   form.addEventListener( 'submit', function( ev ) {
-      
     task = { "id":Date.now(),"title": field.value,"content": content.value, "time":new Date(),"modified": new Date()   } 
     todoarr.push(task) 
     field.value = '';
@@ -24,7 +21,7 @@
    }
     catch(err){
         console.log(err.message);
-    }
+    }*/
 
     
 function showElement(arr){
@@ -34,11 +31,10 @@ function showElement(arr){
   '<button class="dropbtn">&#9776;</button>'+
   '<div class="dropdown-content">'+
     '<a id="delete'+arr[i].id+'"  href="#" >Delete</a>'+
-    '<a id="update'+arr[i].id+'"href="#">update</a>'+
-    '<a href="#">delete</a>'+
+    '<a id="restore'+arr[i].id+'"href="#">Restore</a>'+
   '</div>'+
 '</div>'    
-            innerHTML += '<li  class="todoList" id='+arr[i].id+'><div class="menu">'+dropbtn+'</div><div class="heading"><h1>' + arr[i].title+ '</h1></div><textarea id="contentbody">' +arr[i].content + '</textarea></li>';    
+            innerHTML += '<li  class="todoList" id='+arr[i].id+'><div class="menu">'+dropbtn+'</div><div class="heading"><h1>' + arr[i].title+ '</h1></div><textarea id="contentbody" disabled>' +arr[i].content + '</textarea></li>';    
       }
  return innerHTML;   
 }
@@ -50,25 +46,23 @@ document.addEventListener('click', function(e) {
     var pnode = tar.parentNode.parentNode.parentNode.parentNode;
     todoarr = JSON.parse(localStorage.getItem("todo"));
     trasharr = JSON.parse(localStorage.getItem("trash"));    
-        console.log(e.target.id.substring(6,e.target.id.length))
+        console.log(e.target.id.substring(7,e.target.id.length))
     if(e.target.id.substring(0,6) == 'delete'){
         ids = e.target.id.substring(6,e.target.id.length);
-        i=getJsonElement(ids);
-        trasharr.push(todoarr[i]);
-        todoarr.splice(i,1);   
+        i=getJsonElement(ids)
+        trasharr.splice(i,1);
         storestate();
         display();
     }
         
-    else if(e.target.id.substring(0,6) == 'update'){
-        ids = e.target.id.substring(6,e.target.id.length);
-        i=getJsonElement(ids)
-        console.log(pnode.childNodes.item(2).value)
-        if(localStorage.getItem("todo")){
-        todoarr = JSON.parse(localStorage.getItem("todo")) ;   
-         }
-        todoarr[i].content = pnode.childNodes.item(2).value;
-        storestate() ;
+    else if(e.target.id.substring(0,7) == 'restore'){
+        ids = e.target.id.substring(7,e.target.id.length);
+        i=getJsonElement(ids);
+        console.log(i)
+        
+        todoarr.push(trasharr[i]);
+        trasharr.splice(i,1);   
+        storestate();
         display();
     }}
 });   
@@ -76,7 +70,7 @@ document.addEventListener('click', function(e) {
     
     
 function getJsonElement(id){
-    arr = JSON.parse(localStorage.getItem("todo"));
+    arr = JSON.parse(localStorage.getItem("trash"));
     for(var i=0; i<arr.length;i++){
         if(arr[i].id==id) {
             console.log(i);
@@ -88,18 +82,16 @@ function getJsonElement(id){
 
 function display(){
 todo.innerHTML = null;
-    arr = localStorage.getItem("todo");
+    console.log("display ")
+    arr = localStorage.getItem("trash");
     if (arr) {
-    arr = JSON.parse(localStorage.getItem("todo"));
+    arr = JSON.parse(localStorage.getItem("trash"));
     todo.innerHTML = showElement(arr)}    
 }    
     
 
 window.onload = function(){
-  try{    
-  todoarr = JSON.parse(localStorage.getItem("todo")) }
-    catch(err){}
-  display();
+display();
 }
 
 
