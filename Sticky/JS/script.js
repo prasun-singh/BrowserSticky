@@ -1,3 +1,5 @@
+//"use strict";
+
 (function(){
       
   var todo = document.querySelector( '#todolist' ),
@@ -19,7 +21,8 @@ try{
     tasktime = Date.now();  
     task = { "id":tasktime,
             "title": field.value,
-            "content": content.value, 
+            "content": content.value,
+            "type" : "note",
             "time":new Date(tasktime).toUTCString(),
             "modified": new Date()   
            } 
@@ -32,14 +35,16 @@ try{
     ev.preventDefault();
   }, false);
    }
-    catch(err){console.log(err.message) }
+    catch(err){ }
 
 //method to render the html of array objects takes input of array to be worked upon   
 function showElement(arr){
   var innerHTML = '';
     for(var i=0; i<arr.length;i++){
     var btn = "";
-    var txtArea = "";  
+    var txtArea = ""; 
+       if( arr[i].type == "note")
+           {
     if(formid.getAttribute("id")=="index"){             
    
     btn = '<a id="deleteAT'+arr[i].id+'"  href="#" >Delete</a>'+
@@ -62,6 +67,7 @@ function showElement(arr){
     
     innerHTML += '<li  class="todoList" id='+arr[i].id+'><div                class="heading"><h1>' + arr[i].title+ '</h1>                </div><div class="menu">'+dropbtn+'</div><div                class="noteContent"> '+txtArea+'</div></li>';    
       }
+    }
  return innerHTML;   
 }
   
@@ -168,3 +174,23 @@ function storestate() {
     localStorage.setItem("trash",JSON.stringify(destArr))
   };
 })();
+
+    $("#notesOpen").click(function(){
+        console.log("hello");
+        $("#add").remove();
+        $("#content").remove();
+        $('#notesForm').append('<input type="textarea" name="content" id="content" placeholder="content" required="" height="300px">');
+        $('#notesForm').append('<input type="submit" id="add" value="+">');
+        $("#imgFile").remove();
+    });
+    
+    /*
+    render the adding imageNote html content when clicked in dropdown list
+    */ 
+    $("#imgOpen").click(function(){
+        $("#add").remove();
+        $("#content").remove();
+        $('#notesForm').append('<input type="file" name="content" id="imgFile" placeholder="content" required="" height="300px">');
+        $('#notesForm').append('<input type="submit" id="add" value="+">');
+        $("#content").remove();
+    });
