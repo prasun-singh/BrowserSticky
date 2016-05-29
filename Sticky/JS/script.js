@@ -174,23 +174,3 @@ function storestate() {
     localStorage.setItem("trash",JSON.stringify(destArr))
   };
 })();
-
-    $("#notesOpen").click(function(){
-        console.log("hello");
-        $("#add").remove();
-        $("#content").remove();
-        $('#notesForm').append('<input type="textarea" name="content" id="content" placeholder="content" required="" height="300px">');
-        $('#notesForm').append('<input type="submit" id="add" value="+">');
-        $("#imgFile").remove();
-    });
-    
-    /*
-    render the adding imageNote html content when clicked in dropdown list
-    */ 
-    $("#imgOpen").click(function(){
-        $("#add").remove();
-        $("#content").remove();
-        $('#notesForm').append('<input type="file" name="content" id="imgFile" placeholder="content" required="" height="300px">');
-        $('#notesForm').append('<input type="submit" id="add" value="+">');
-        $("#content").remove();
-    });

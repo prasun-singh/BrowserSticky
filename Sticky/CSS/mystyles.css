@@ -10,7 +10,7 @@
     font-size: 15px;
     font-family: helvetica, arial, sans-serif;
   }
-  .divform {
+  form {
     width: 280px;
     background: #333;
     color: #fff;
@@ -72,11 +72,11 @@
 {
     margin-top:15px;
     float:left;
-    //margin-left: -230px;
+    margin-left: -230px;
 }
 
 .todoList{
-height: 250px;
+height: 220px;
 }
 
 /* Dropdown Content (Hidden by Default) */

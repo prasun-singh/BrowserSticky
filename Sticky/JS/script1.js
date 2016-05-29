@@ -1,11 +1,12 @@
 "use strict"; 
 
 //global objet to call methods on load as required
-var toDoArr ={};
+var toDos ={};
 
 //IIFE
 (function(){
     
+        //global vaiables
         var notes = new Array;
         var notesStr = localStorage.getItem('note');
         var trashNotes = new Array;
@@ -15,7 +16,7 @@ var toDoArr ={};
         if (trashNotesStr !== null) {
             trashNotes = JSON.parse(trashNotesStr); }
     
-       //condition to check whether to delete a note  
+       //for deleting todos after 7 days from trash
        if(localStorage.getItem('trash')){   
         for(var i=trashNotes.length-1 ; i>=0 ;i--){
             var one_day=1000*60*60*24;
@@ -33,17 +34,17 @@ var toDoArr ={};
      }
   }
 
-    //method for updating the trash length
-    toDoArr.updateTrashLength = function(){
+    //updated the trash length for reflecting in header
+    toDos.updateTrashLength = function(){
         document.getElementById('trashLink').innerHTML = "Trash("+trashNotes.length+")"; 
     }
 
     //empty the trashed notes
-    toDoArr.emptyTrash = function(){
+    toDos.emptyTrash = function(){
         trashNotes.splice(0,trashNotes.length);
         saveTrashState();
-        toDoArr.showTrashNotes();
-        toDoArr.updateTrashLength();
+        toDos.showTrashNotes();
+        toDos.updateTrashLength();
         alert("trash is empty now...!!");
     }
 
@@ -71,7 +72,7 @@ var toDoArr ={};
     }
     
     //add a new note and stored into localstorage
-    toDoArr.addNote = function() 
+    toDos.addNote = function() 
     {
         var task = document.getElementById('task').value;
         var title = document.getElementById('title').value;
@@ -85,19 +86,19 @@ var toDoArr ={};
         var noteObject =new note(title ,task , toDoType) ;
         notes.push(noteObject);
         saveNotesState();
-        toDoArr.showNotes();
+        toDos.showNotes();
         document.getElementById('task').value = "";
         document.getElementById('title').value = "";
         return false;
     }
     
     //add the image note in the localStorage
-    toDoArr.addImageNote = function(){
+    toDos.addImageNote = function(){
         var bannerImage = document.getElementById('bannerImg').value;
         var title = document.getElementById('title').value;
         //check for empty fields
         if(bannerImage == '' || title == ''){
-            alert("Add the title and content!!");
+            alert("Please fill both the fields....!!");
             return false;
         }
         var img = document.getElementById('demoImg');
@@ -112,7 +113,7 @@ var toDoArr ={};
             var noteObject =new note(title , task , toDoType)
             notes.push(noteObject);
             saveNotesState();
-            toDoArr.showNotes();
+            toDos.showNotes();
         };
        fReader.readAsDataURL(file);
        document.getElementById('bannerImg').value = "";
@@ -120,7 +121,7 @@ var toDoArr ={};
     }
 
     //update note according to the id generated
-    toDoArr.updateNote = function(id){
+    toDos.updateNote = function(id){
         var title = document.getElementById(id).getElementsByClassName("note-title")[0].value;
         var note = document.getElementById(id).getElementsByClassName("note-content")[0].value;
         //var img =  $("#"+id).find(".tableBanner#" + id ).val();
@@ -135,12 +136,12 @@ var toDoArr ={};
             }
         }
         saveNotesState();
-        toDoArr.showNotes();
+        toDos.showNotes();
         return false;
     }
 
     //move the note to trash with respect to its timestamp id
-    toDoArr.removeNote = function(id) {
+    toDos.removeNote = function(id) {
         for(var i=0; i< notes.length; i++){
           if(notes[i].id == id){
             var trashNoteObject =new note(notes[i].title ,notes[i].note , notes[i].type ) ;
@@ -152,14 +153,14 @@ var toDoArr ={};
         }
         saveTrashState();
         saveNotesState();
-        toDoArr.showNotes();
-        toDoArr.updateTrashLength();
+        toDos.showNotes();
+        toDos.updateTrashLength();
         alert("Note has been moved to trash..!!!");
         return false;
     }
 
     //restore the trashNotes back to normal notes
-    toDoArr.restoreTrashNote = function(id){
+    toDos.restoreTrashNote = function(id){
         for(var i=0;i<trashNotes.length;i++){
             if(trashNotes[i].id == id){
             var noteObject =new note(trashNotes[i].title ,trashNotes[i].note , trashNotes[i].type) ;
@@ -170,14 +171,14 @@ var toDoArr ={};
         }
         saveTrashState();
         saveNotesState();
-        toDoArr.showTrashNotes();
-        toDoArr.updateTrashLength();
+        toDos.showTrashNotes();
+        toDos.updateTrashLength();
         alert("Note has been restored..!!!");
         return false;   
     }
 
     //delete the note from trash with respect to timestamp id
-    toDoArr.deleteTrashNote = function(id) {
+    toDos.deleteTrashNote = function(id) {
         console.log(id);
         var result = confirm("Delete Note forever?");
         if(result){
@@ -189,18 +190,18 @@ var toDoArr ={};
           }   
         }
         saveTrashState();
-        toDoArr.showTrashNotes();
-        toDoArr.updateTrashLength();
+        toDos.showTrashNotes();
+        toDos.updateTrashLength();
         return false;
        }
     }
 
     //display all the notes  
-    toDoArr.showNotes = function() {
+    toDos.showNotes = function() {
         var html = '<ul>';
         for(var i=0; i<notes.length; i++) {
             html += "<li><div class='colour1'>" + 
-                        "<form class='updateForm' id='"+notes[i].timestamp+"' onsubmit='toDoArr.updateNote(this.id)'>" +
+                        "<form class='updateForm' id='"+notes[i].timestamp+"' onsubmit='toDos.updateNote(this.id)'>" +
                 "<input type='text' class='note-title' placeholder='Untitled' maxlength='10' value='"+notes[i].title + "' id='"+notes[i].timestamp+"'/>";
                 if(notes[i].type == "image"){
                 var imgSrc = fetchImage(notes[i].note);
@@ -209,7 +210,7 @@ var toDoArr ={};
             else if(notes[i].type == "note"){
                html+="<textarea class='note-content' placeholder='Your content here' id='"+notes[i].timestamp+"' />"+notes[i].note+"</textarea>";
             }
-            html+="<img src='../images/close.png' onclick='toDoArr.removeNote(this.parentNode.id)' class='delete'/>" +
+            html+="<img src='../images/close.png' onclick='toDos.removeNote(this.parentNode.id)' class='delete'/>" +
                     "<input type='submit' class='updated' value='update'/>" +
                     "</form></div></li>";
                 };
@@ -218,7 +219,7 @@ var toDoArr ={};
     }
 
     //display all the trash notes
-    toDoArr.showTrashNotes = function(){
+    toDos.showTrashNotes = function(){
         var html = '<ul>';
         for(var i=0; i<trashNotes.length; i++) {
             html += "<li><div class='colour1'>" + 
@@ -231,8 +232,8 @@ var toDoArr ={};
             else if(trashNotes[i].type == "note"){
                   html+="<textarea class='note-content' placeholder='Your content here' id='"+trashNotes[i].timestamp+"' />"+trashNotes[i].note+"</textarea>";
             }
-            html+="<img src='../images/close.png' onclick='toDoArr.deleteTrashNote(this.id)' class='delete' id='" + trashNotes[i].timestamp + "'/>" +
-                       "<input type='button' class='updated' value='restore' onclick='toDoArr.restoreTrashNote(this.id)' id='" + trashNotes[i].timestamp + "'/>" +
+            html+="<img src='../images/close.png' onclick='toDos.deleteTrashNote(this.id)' class='delete' id='" + trashNotes[i].timestamp + "'/>" +
+                       "<input type='button' class='updated' value='restore' onclick='toDos.restoreTrashNote(this.id)' id='" + trashNotes[i].timestamp + "'/>" +
                         "</form></div></li>";
                 };
         html += '</ul>';
@@ -262,7 +263,7 @@ var toDoArr ={};
         $("#add").remove();
         $("#content").remove();
         $('#toDoMain').append('<div class="input-group input-group-lg inputBox" id="content"><textarea class="form-control note_area" id="task" placeholder="take a note.." aria-describedby="sizing-addon1" required onkeyup="autoGrow(this)"></textarea></div>');
-        $('#toDoMain').append('<div id="add" class="addButton" ><input type="submit" class="button"  onclick="toDoArr.addNote()" value="Done"></div>');
+        $('#toDoMain').append('<div id="add" class="addButton" ><input type="submit" class="button"  onclick="toDos.addNote()" value="Done"></div>');
         $("#imgFile").remove();
     });
     
@@ -273,7 +274,7 @@ var toDoArr ={};
         $("#add").remove();
         $("#imgFile").remove();
         $('#toDoMain').append('<div class="input-group input-group-lg inputBox" id="imgFile"><input type="file" required id="bannerImg"/></div>');
-        $('#toDoMain').append('<div id="add" class="addButton" ><input type="submit" class="button" onclick="toDoArr.addImageNote()" value="Done"></div>');
+        $('#toDoMain').append('<div id="add" class="addButton" ><input type="submit" class="button" onclick="toDos.addImageNote()" value="Done"></div>');
         $("#content").remove();
     });
 })();
@@ -281,9 +282,9 @@ var toDoArr ={};
 var elements = document.getElementsByTagName('body');
 var id = elements[0].getAttribute('id');
 
-if(id == "mainPage"){toDoArr.showNotes();}
-if(id == "trashPage"){toDoArr.showTrashNotes();}
-toDoArr.updateTrashLength;
+if(id == "mainPage"){toDos.showNotes();}
+if(id == "trashPage"){toDos.showTrashNotes();}
+toDos.updateTrashLength;
 
 //for dyanamically growing textarea
 function autoGrow(element) {

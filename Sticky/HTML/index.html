@@ -2,23 +2,24 @@
 <head>
 <link rel="stylesheet" type="text/css" href="../CSS/mystyles.css"/>    
 </head>    
-<body id="mainPage">
+<body>
   <header><h1>Add New Task</h1></header>
-  <button id="imgOpen">image</button>
-  <button id="notesOpen">notes</button>
+    <a href="image.html" style="float:right;margin-top:30px">image</a>
     <a href="trash.html" style="float:right;">Trash</a>
   <section>
-    <div id="index">
-      <div class="divform" id="notesForm">
+    <div id="index" name="divform">
+    <form action="#" method="post">
+      <div>
         <label for="newitem">Add item</label>
         <input type="text" name="title" id="title" placeholder="title" required="">
-        </div>
+        <input type="textarea" name="content" id="content" placeholder="content" required="" height="300px">
+        <input type="submit" value="+">
       </div>
-    <img src="" id="demoImg" style="display:none;">
-      <ul id="todolist"></ul>     
+    </form>
+      <ul id="todolist"></ul>
+    </div>     
   </section>
-<script src = "https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="../JS/image.js"></script>
+<script src="../JS/script.js"></script>
 </body>    
 </html>   
 
