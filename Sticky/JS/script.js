@@ -56,7 +56,7 @@ try{
 //method to render the html of array objects takes input of array to be worked upon   
 function showElement(arr){
   var innerHTML = '';
-    for(var i=0; i<arr.length;i++){
+    for(var i=arr.length-1; i>=0;i--){
     var btn = "";
     var txtArea = ""; 
     if(formid.getAttribute("id")=="index"){             
@@ -69,7 +69,6 @@ function showElement(arr){
     }
    
     else{
-    console.log("roha");
     btn = '<a id="deleteTR'+arr[i].id+'"  href="#" >Delete</a>'+
           '<a id="restore'+arr[i].id+'"href="#">Restore</a>'
     
