@@ -2,23 +2,26 @@
 <head>
 <link rel="stylesheet" type="text/css" href="../CSS/mystyles.css"/>    
 </head>    
-<body>
-  <header><h1>Add New Task</h1></header>
-    <a href="image.html" style="float:right;margin-top:30px">image</a>
-    <a href="trash.html" style="float:right;">Trash</a>
+<body id="mainPage">
+  <header>
+<h2 style="float:left;">AddNote</h2>
+<h2 style="float:right;margin-right:10px;"><a href="trash.html">Trash</a></h2>
+    </header>
   <section>
-    <div id="index" name="divform">
+    <div id="index" name="divform" class="mainForm">
     <form action="#" method="post">
       <div>
-        <label for="newitem">Add item</label>
-        <input type="text" name="title" id="title" placeholder="title" required="">
-        <input type="textarea" name="content" id="content" placeholder="content" required="" height="300px">
-        <input type="submit" value="+">
+        <input type="text" name="title" id="title" placeholder="title" required=""></br></br>
+        <textarea name="content" id="content" placeholder="content" required="" rows="5" cols="30"></textarea></br></br>
+        <input type="file" name="imgFile" id="imgFile" required="" height="300px"></br></br>
+        <input type="submit" class="button" value="Add Task">
       </div>
     </form>
-      <ul id="todolist"></ul>
-    </div>     
+      </div>
+    <img src="" id="demoImg" style="display:none;">
+      <ul id="todolist"></ul>     
   </section>
+<script src = "https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="../JS/script.js"></script>
 </body>    
 </html>   

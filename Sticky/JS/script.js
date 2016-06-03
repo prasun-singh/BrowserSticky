@@ -6,7 +6,7 @@
   form = document.querySelector( 'form' ),
   field = document.querySelector( '#title' );
   var content = document.querySelector( '#content' );
-  var formid = document.querySelector('div');    
+  var formid = document.querySelector('div'); 
   var sourceArr = null;
   var destArr = null;    
     
@@ -18,21 +18,37 @@ try{
     if(!sourceArr){
         sourceArr = new Array;
     } 
-    tasktime = Date.now();  
-    task = { "id":tasktime,
+  var bannerImage = document.getElementById('imgFile').value;
+  var img = document.getElementById('demoImg');
+  var file = document.getElementById('imgFile').files[0];
+      console.log("submit");
+      
+        var fReader = new FileReader();
+        fReader.onload = function() {
+            console.log("submitfreader");
+       img.src = fReader.result;
+      var binaryImage  = getBase64Image(img);
+       document.getElementById('imgFile').value = "";
+       document.getElementById('title').value = "";
+      tasktime = Date.now();  
+      task = { "id":tasktime,
             "title": field.value,
             "content": content.value,
-            "type" : "note",
+            "image": binaryImage,
             "time":new Date(tasktime).toUTCString(),
             "modified": new Date()   
            } 
+      
     sourceArr.push(task) 
     field.value = '';
     field.focus();
     content.value = '';  
     storestate();
-    display()
-    ev.preventDefault();
+    display();
+            
+        };
+       fReader.readAsDataURL(file);
+        ev.preventDefault();
   }, false);
    }
     catch(err){ }
@@ -43,20 +59,23 @@ function showElement(arr){
     for(var i=0; i<arr.length;i++){
     var btn = "";
     var txtArea = ""; 
-       if( arr[i].type == "note")
-           {
     if(formid.getAttribute("id")=="index"){             
    
     btn = '<a id="deleteAT'+arr[i].id+'"  href="#" >Delete</a>'+
           '<a id="update'+arr[i].id+'"href="#">update</a>'
     txtArea = '<textarea id="contentbody">' +arr[i].content +             '</textarea> '
+    var imgSrc = fetchImage(arr[i].image);
+    var image = "<img src="+imgSrc+" class='imgbody'/>";
     }
    
     else{
+    console.log("roha");
     btn = '<a id="deleteTR'+arr[i].id+'"  href="#" >Delete</a>'+
           '<a id="restore'+arr[i].id+'"href="#">Restore</a>'
     
     txtArea = '<textarea id="contentbody" disabled col="20">'             +arr[i].content + '</textarea> '
+     var imgSrc = fetchImage(arr[i].image);
+     var image = "<img src="+imgSrc+" class='imgbody'/>";
     }  
     
     dropbtn = '<div class="dropdown">'+
@@ -65,9 +84,8 @@ function showElement(arr){
               '<a href="#">delete</a>'+
               '</div></div>'    
     
-    innerHTML += '<li  class="todoList" id='+arr[i].id+'><div                class="heading"><h1>' + arr[i].title+ '</h1>                </div><div class="menu">'+dropbtn+'</div><div                class="noteContent"> '+txtArea+'</div></li>';    
+    innerHTML += '<li  class="todoList" id='+arr[i].id+'><div                class="heading"><h1>' + arr[i].title+ '</h1>                </div><div class="menu">'+dropbtn+'</div><div                class="noteContent"> '+txtArea+'</div><div class="noteImage">'+image+'</div></li>';    
       }
-    }
  return innerHTML;   
 }
   
@@ -172,5 +190,22 @@ function storestate() {
       }
     localStorage.setItem("todo",JSON.stringify(sourceArr))
     localStorage.setItem("trash",JSON.stringify(destArr))
-  };
+};
+
+    //return the url of image for displaying
+    function fetchImage (dataImage) {
+        return "data:image/png;base64," + dataImage;
+    }
+    
+        //convert thr image data into binary
+    function getBase64Image(img) {
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        var dataURL = canvas.toDataURL("image/png");
+        return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+    }
+    
 })();
